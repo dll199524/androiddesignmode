@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "designmode"
 include ':app'
 include ':aop'
+include ':butterknife-compiler'
+include ':butterknife'
