@@ -1,4 +1,4 @@
-package com.example.designmode.blocklog;
+package com.example.designmode.blocklog.handlerlog;
 
 public class StackTraceInfo {
     public long mTime;

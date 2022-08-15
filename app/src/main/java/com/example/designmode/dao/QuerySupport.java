@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hjcai on 2021/3/25.
  * 专门用来查询的类
  * 利用builder设计模式 设置各种参数
  */

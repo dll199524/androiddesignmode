@@ -1,4 +1,4 @@
-package com.example.designmode.blocklog;
+package com.example.designmode.blocklog.handlerlog;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
