@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="dialog_default_anim">
+        <item name="android:windowEnterAnimation">@anim/dialog_scale_anim_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_scale_anim_out</item>
+    </style>
+
+    <style name="dialog_from_bootom_anim">
+        <item name="android:windowEnterAnimation">@anim/dialog_form_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_form_bottom_out</item>
+    </style>
+
+    <style name="dialog" parent="Theme.AppCompat.Dialog">
+
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+
+    </style>
+</resources>

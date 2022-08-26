@@ -3,8 +3,11 @@ package com.example.butterknife_compiler;
 
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -63,8 +66,6 @@ public class ButterknifeProcessor extends AbstractProcessor {
     }
 
 
-
-
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(BindView.class);
@@ -93,12 +94,41 @@ public class ButterknifeProcessor extends AbstractProcessor {
                     .addSuperinterface(unbinderName)
                     .addField(activityName, "target", Modifier.PRIVATE);
 
+            MethodSpec.Builder constructMethod = MethodSpec.constructorBuilder()
+                    .addParameter(activityName, "target")
+                    .addModifiers(Modifier.PUBLIC)
+                    .addStatement("this.target = target");
 
+            ClassName callSuperClass = ClassName.get("andoridx.annotation", "CallSuper");
+            MethodSpec.Builder unbindMethod = MethodSpec.methodBuilder("unbind")
+                    .addAnnotation(Override.class)
+                    .addAnnotation(callSuperClass)
+                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                    .addStatement("$T target = this.target", activityName)
+                    .addStatement("if (target == null) throw new IllegalStateException(\"Bindings already cleared. target is null \");");
+
+            for (Element annotation : annotations) {
+                String annotationName = annotation.getSimpleName().toString();
+                ClassName utilName = ClassName.get("com.example.designmode", "Utlis");
+                int viewId = annotation.getAnnotation(BindView.class).value();
+
+                constructMethod.addStatement("target.$L = $T.findViewById(target, %L);", annotationName, utilName, viewId);
+                unbindMethod.addStatement("target.$L = null;", annotationName);
+            }
+            classBulider.addMethod(constructMethod.build());
+            classBulider.addMethod(unbindMethod.build());
+
+            try {
+                String packageName = elementsUtils.getPackageOf(enclosingElement).getQualifiedName().toString();
+                JavaFile.builder(packageName, classBulider.build())
+                        .addFileComment("由javapot自动生成请勿删除")
+                        .build()
+                        .writeTo(filer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
-
-
-
         return false;
     }
 }
