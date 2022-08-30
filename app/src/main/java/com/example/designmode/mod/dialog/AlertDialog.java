@@ -14,7 +14,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
     private AlertController mAlertController;
     protected AlertDialog(Context context, int themeId) {
         super(context, themeId);
-        mAlertController = new AlertController(context, themeId);
+        mAlertController = new AlertController(this, getWindow());
     }
 
     public void setText(int viewId, CharSequence text) {
@@ -31,7 +31,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
 
         public Bulider(Context context) {this(context, R.style.dialog);}
 
-        public Bulider(Context context, int themeId) {params = new AlertController.AlertParams();}
+        public Bulider(Context context, int themeId) {params = new AlertController.AlertParams(context, themeId);}
 
         public Bulider setTitle(CharSequence title) {
             params.mTitle = title;
@@ -111,10 +111,15 @@ public class AlertDialog extends Dialog implements DialogInterface {
         }
 
 
-
-
         public AlertDialog create() {
-
+            final AlertDialog dialog = new AlertDialog(params.mContext, params.mThemeResId);
+            params.apply(dialog.mAlertController);
+            dialog.setCancelable(params.mCancle);
+            if (params.mCancle) dialog.setCancelable(true);
+            dialog.setOnCancelListener(params.mCancleListener);
+            dialog.setOnDismissListener(params.mOnDismissListener);
+            if (params.mOnKeyListener != null) dialog.setOnKeyListener(params.mOnKeyListener);
+            return dialog;
         }
 
         public AlertDialog show() {

@@ -15,6 +15,7 @@ public class DialogViewHelper {
     public DialogViewHelper(Context context, int layoutId) {
         mContentView = LayoutInflater.from(context).inflate(layoutId, null);
     }
+    public DialogViewHelper() {}
 
     public void setText(int viewId, CharSequence text) {
         View view = getView(viewId);
