@@ -1,6 +1,10 @@
 package com.example.designmode.mod.factory;
 
+import android.util.LruCache;
+
 public class MemoryIOHandler implements IOHandler{
+
+    private static LruCache<String, Object> mCache = new LruCache<>(10 * 1024 *1024);
     @Override
     public void save(String key, String val) {
 
