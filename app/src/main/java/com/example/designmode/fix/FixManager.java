@@ -152,5 +152,4 @@ public class FixManager {
         dexElementsField.set(pathList, originDexElements);
     }
 
-
 }
