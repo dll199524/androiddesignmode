@@ -8,7 +8,7 @@ public interface StartUp<T> extends Dispatcher{
 
     T create(Context context);
 
-    List<Class<? extends StartUp<?>>> dependcies();
+    List<Class<? extends StartUp<?>>> dependencies();
 
     int getDependiceCount();
 

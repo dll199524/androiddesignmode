@@ -25,7 +25,7 @@ public class TopologySort {
             if (dependenceCount == 0)
                 zeroDeque.offer(startUp.getClass());
             else {
-                for (Class<? extends StartUp<?>> parent : startUp.dependcies()) {
+                for (Class<? extends StartUp<?>> parent : startUp.dependencies()) {
                     List<Class <? extends StartUp>> child = childStartUpMap.get(parent);
                     if (child == null) {
                         child = new ArrayList<>();
