@@ -34,6 +34,7 @@
       <module name="designmode.common" target="11" />
       <module name="designmode.order" target="11" />
       <module name="designmode.person" target="11" />
+      <module name="designmode.plugin" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -8,7 +8,7 @@ android {
     compileSdk app_android.compileSdk
 
     defaultConfig {
-        applicationId "com.example.order"
+        if (!isRelease) {applicationId app_id.order}
         minSdk app_android.minSdk
         targetSdk app_android.targetSdk
         versionCode app_android.versionCode
