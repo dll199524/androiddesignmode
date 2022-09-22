@@ -18,11 +18,22 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.mojo/animal-sniffer-annotations/1.17/f97ce6decaea32b36101e37979f8b647f00681fb/animal-sniffer-annotations-1.17.jar" />
         </processorPath>
         <module name="designmode.butterknife-compiler.main" />
+        <module name="designmode.arouter-compiler.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
+    <bytecodeTargetLevel target="1.7">
       <module name="designmode.app" target="11" />
+      <module name="designmode.arouter-api" target="11" />
+      <module name="designmode.arouter-compiler" target="1.8" />
+      <module name="designmode.arouter-compiler.main" target="1.8" />
+      <module name="designmode.arouter-compiler.test" target="1.8" />
       <module name="designmode.butterknife" target="11" />
+      <module name="designmode.butterknife-compiler" target="1.8" />
+      <module name="designmode.butterknife-compiler.main" target="1.8" />
+      <module name="designmode.butterknife-compiler.test" target="1.8" />
+      <module name="designmode.common" target="11" />
+      <module name="designmode.order" target="11" />
+      <module name="designmode.person" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

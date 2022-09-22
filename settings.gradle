@@ -16,11 +16,14 @@ dependencyResolutionManagement {
 
 }
 
-
-
-
 rootProject.name = "designmode"
 include ':app'
 include ':aop'
 include ':butterknife-compiler'
 include ':butterknife'
+include ':order'
+include ':person'
+include ':common'
+include ':arouter-annotation'
+include ':arouter-compiler'
+include ':arouter-api'

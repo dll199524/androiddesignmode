@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Designmode"
         tools:targetApi="31">
         <activity
-            android:name=".FixActivity"
+            android:name=".fix.FixActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
