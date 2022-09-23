@@ -1,42 +1,75 @@
 package com.example.designmode.utils;
 
-import android.content.Context;
 
-import java.io.File;
-import java.lang.reflect.Array;
+import android.content.Intent;
+import android.os.Build;
+
 import java.lang.reflect.Field;
-
-import dalvik.system.DexClassLoader;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 public class HookUtil {
 
-    private final static String apkPath = "";
-
-    public static void loadClass(Context context) {
+    private static final String TARGET_INTENT = "target_intent";
+    public static void hookAMS() {
         try {
-            Class<?> clazz = Class.forName("dalvik.system.BaseDexClassLoader");
-            Field pathListField = clazz.getDeclaredField("pathList");
-            pathListField.setAccessible(true);
+            Field singletonField = null;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) { // 小于8.0
+                Class<?> clazz = Class.forName("android.app.ActivityManagerNative");
+                singletonField = clazz.getDeclaredField("gDefault");
+            } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+                Class<?> clazz = Class.forName("android.app.ActivityManager");
+                singletonField = clazz.getDeclaredField("IActivityManagerSingleton");
+            } else {
+                Class<?> clazz = Class.forName("android.app.ActivityTaskManager");
+                singletonField = clazz.getDeclaredField("IActivityTaskManagerSingleton");
+            }
+            singletonField.setAccessible(true);
+            Object singleton = singletonField.get(null);
 
-            Class<?> dexClazz = Class.forName("dalvik.system.DexPathList");
-            Field dexElementField = dexClazz.getField("dexElements");
-            dexElementField.setAccessible(true);
+            Class<?> singletonClass = Class.forName("android.util.Singleton");
+            Field mInstanceField = singletonClass.getDeclaredField("mInstance");
+            mInstanceField.setAccessible(true);
+            final Object mInstance = mInstanceField.get(singleton);
 
-            ClassLoader pathClassLoader = context.getClassLoader();
-            Object hostPathList = pathListField.get(pathClassLoader);
-            Object[] hostDexElement = (Object[]) dexElementField.get(hostPathList);
+            Class<?> iActivityClass = null;
 
-            ClassLoader dexClassLoader = new DexClassLoader(apkPath, context.getCacheDir().getAbsolutePath(),
-                    null, pathClassLoader);
-            Object pluginPathList = pathListField.get(dexClassLoader);
-            Object[] pluginDexElement = (Object[]) dexElementField.get(dexClassLoader);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+                iActivityClass = Class.forName("android.app.IActivityManager");
+            } else {
+                iActivityClass = Class.forName("android.app.ActivityTaskManager");
+            }
 
-            Object[] newDexElement = (Object[]) Array.newInstance(hostDexElement.getClass().getComponentType(),
-                    hostDexElement.length + pluginDexElement.length);
-            System.arraycopy(hostDexElement, 0, newDexElement, 0, hostDexElement.length);
-            System.arraycopy(pluginDexElement, 0, newDexElement, hostDexElement.length, pluginDexElement.length);
-            dexElementField.set(hostPathList, newDexElement);
+            Object proxyInstance = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                    new Class[]{iActivityClass}, new InvocationHandler() {
+                        @Override
+                        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                            if (method.getName().equals("startActivity")) {
+                                int index = -1;
+                                for (int i = 0; i < args.length; i++) {
+                                    if (args[i] instanceof Intent) {
+                                        index = i;
+                                        break;
+                                    }
+                                }
+                                Intent in = (Intent) args[index];
+                                Intent proxyIntent = new Intent();
+                                proxyIntent.setClassName("com.example.designmode",
+                                        "com.example.designmode.ProxyActivity");
+                                proxyIntent.putExtra(TARGET_INTENT, in);
+                                args[index] = proxyIntent;
+                            }
+
+                            return method.invoke(mInstance, args);
+                        }
+                    });
+            singletonField.set(mInstance, proxyInstance);
 
         } catch (Exception e) {e.printStackTrace();}
+    }
+
+    public static void hookHandler() {
+
     }
 }

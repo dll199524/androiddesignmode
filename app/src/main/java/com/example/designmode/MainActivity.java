@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.designmode.hook.InstrumentationProxy;
 import com.example.designmode.performance.UserManager;
@@ -18,13 +21,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         UserManager userManager = UserManager.getInstance(this);
+        replaceActivityIntrumentation(this);
+        Intent in = new Intent(Intent.ACTION_VIEW);
+        in.setData(Uri.parse("http://liuwangshu.cn/"));
+        startActivity(in);
     }
 
 
     //hook activity startActivity方法
     public void replaceActivityIntrumentation(Activity activity) {
         try {
-            Field field = activity.getClass().getField("mIntrumentation");
+            Field field = Activity.class.getDeclaredField("mIntrumentation");
             field.setAccessible(true);
             Instrumentation instrumentation = (Instrumentation) field.get(activity);
             InstrumentationProxy proxy = new InstrumentationProxy(instrumentation);
