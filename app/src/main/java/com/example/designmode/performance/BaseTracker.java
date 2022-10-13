@@ -1,4 +1,4 @@
-package com.example.designmode.performance.battery;
+package com.example.designmode.performance;
 
 import android.app.Activity;
 import android.app.Application;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.designmode.performance.ITracker;
 
 public abstract class BaseTracker implements ITracker, Application.ActivityLifecycleCallbacks {
     @Override
