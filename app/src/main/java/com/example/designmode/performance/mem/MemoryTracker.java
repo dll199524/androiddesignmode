@@ -16,6 +16,8 @@ import com.example.designmode.performance.ActivityStack;
 import com.example.designmode.performance.BaseTracker;
 import com.example.designmode.utils.ProcessUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -45,6 +47,10 @@ public class MemoryTracker extends BaseTracker {
 
     @Override
     public void startTrack(Application application) {
+//        try {
+//            Debug.dumpHprofData(application.getCacheDir().getAbsolutePath() + "hprofFile");
+//        } catch (IOException e) {e.printStackTrace();}
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

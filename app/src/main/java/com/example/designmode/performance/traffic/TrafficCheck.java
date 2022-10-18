@@ -1,7 +1,6 @@
 package com.example.designmode.performance.traffic;
 
 import android.app.Activity;
-import android.app.Application;
 import android.net.TrafficStats;
 
 import com.example.designmode.performance.BaseTracker;
