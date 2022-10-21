@@ -42,6 +42,7 @@ public class TrafficCheck extends BaseTracker {
             item.activityName = activity.getClass().getSimpleName();
             hashMap.put(activity, item);
         }
+        //核心方法
         currentStats = TrafficStats.getUidRxBytes(android.os.Process.myUid());
     }
 
