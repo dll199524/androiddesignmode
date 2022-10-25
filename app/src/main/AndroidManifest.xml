@@ -16,13 +16,19 @@
         android:theme="@style/Theme.Designmode"
         tools:targetApi="31">
         <activity
+            android:name=".EventBusTestActivity1"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProxyActivity"
             android:exported="false" />
         <activity
             android:name=".fix.FixActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".EventBusTestActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
