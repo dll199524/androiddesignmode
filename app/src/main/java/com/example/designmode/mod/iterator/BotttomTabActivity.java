@@ -23,9 +23,15 @@ public class BotttomTabActivity extends AppCompatActivity {
 //        items.add(new MainBottomTabItem(this));
 //        items.add(new MainBottomTabItem(this));
 //        items.add(new MainBottomTabItem(this));
-        items.add(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text1").create());
-        items.add(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text2").create());
-        items.add(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text3").create());
-        tabItemNavigation.addTabItem(items);
+//        items.add(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text1").create());
+//        items.add(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text2").create());
+//        items.add(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text3").create());
+//        tabItemNavigation.addTabItem(items);
+
+        ListTabIterator<MainBottomTabItem> iterator = new ListTabIterator<>();
+        iterator.addItem(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text1").create());
+        iterator.addItem(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text2").create());
+        iterator.addItem(new MainBottomTabItem.Bulider(this).resId(R.drawable.main_tab_item).text("text3").create());
+        tabItemNavigation.addTabItem(iterator);
     }
 }

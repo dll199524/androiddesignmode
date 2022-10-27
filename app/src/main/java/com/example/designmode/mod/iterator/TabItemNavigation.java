@@ -46,6 +46,22 @@ public class TabItemNavigation extends LinearLayout {
         items.get(0).selected(true);
     }
 
+    public void addTabItem(TabIterator iterator) {
+        int index = 0;
+        items.clear();
+        while (iterator.hasNext()) {
+            BottomTabItem bottomTabItem = iterator.next();
+            View tabView = bottomTabItem.getTabView();
+            addView(tabView);
+            LinearLayout.LayoutParams params = (LayoutParams) tabView.getLayoutParams();
+            params.weight = 1;
+            params.gravity = Gravity.CENTER;
+            tabView.setLayoutParams(params);
+            setItemClickListener(tabView, index++);
+            items.add(bottomTabItem);
+        }
+    }
+
     private void setItemClickListener(View tabView, int position) {
         tabView.setOnClickListener(new OnClickListener() {
             @Override
