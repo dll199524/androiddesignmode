@@ -48,8 +48,8 @@ ext {
             "aspectj"           : 'org.aspectj:aspectjrt:1.9.6',
 
             "rxpermissions"     : 'com.github.tbruyelle:rxpermissions:0.12',
-            "rxjava3"           : 'io.reactivex.rxjava3:rxjava:3.0.4',
-            "rxjava31"          : 'io.reactivex.rxjava3:rxjava:rxandroid:3.0.4',
+            "rxjava3"           : 'io.reactivex.rxjava3:rxandroid:3.0.0',
+            "rxjava31"          : 'io.reactivex.rxjava3:rxjava:3.0.0',
 
             "retrofit2"         : 'com.squareup.retrofit2:retrofit:2.4.0',
             "retrofit21"        : 'com.squareup.retrofit2:converter-gson:2.4.0',

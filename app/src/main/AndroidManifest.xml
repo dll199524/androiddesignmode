@@ -16,10 +16,10 @@
         android:theme="@style/Theme.Designmode"
         tools:targetApi="31">
         <activity
-            android:name=".EventBusTestActivity1"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".eventBus.EventBusTestActivity"
             android:exported="false" />
         <activity
             android:name=".ProxyActivity"
@@ -28,7 +28,7 @@
             android:name=".fix.FixActivity"
             android:exported="false" />
         <activity
-            android:name=".EventBusTestActivity"
+            android:name=".mod.iterator.BotttomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
