@@ -48,7 +48,7 @@ public class RealCall implements Call {
                 if (urlConnection instanceof HttpsURLConnection) {
                     //https的一些操作
                 }
-            } catch (Exception e) {e.printStackTrace();
+            } catch (Exception e) {e.printStackTrace();}
         }
     }
 }
