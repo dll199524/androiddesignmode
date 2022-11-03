@@ -3,11 +3,20 @@ package com.example.designmode.okhttp;
 
 import android.util.Log;
 
+import com.example.designmode.okhttp.interceptor.BridgeInterceptor;
+import com.example.designmode.okhttp.interceptor.CacheInterceptor;
+import com.example.designmode.okhttp.interceptor.ConnectInterceptor;
+import com.example.designmode.okhttp.interceptor.Interceptor;
+import com.example.designmode.okhttp.interceptor.RetryAndFollowUpInterceptor;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+
 
 public class RealCall implements Call {
 
@@ -43,41 +52,51 @@ public class RealCall implements Call {
             //Volley xUtils 基于HttpUrlConnection  okhttp 基于 socket + okio
             final Request request = orignalRequest;
             try {
-                URL url = new URL(request.url);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                if (urlConnection instanceof HttpsURLConnection) {
+//                URL url = new URL(request.url);
+//
+//                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//                if (urlConnection instanceof HttpsURLConnection) {
                     //https的一些操作
 //                    HttpsURLConnection httpsURLConnection = (HttpsURLConnection) urlConnection;
 //                    httpsURLConnection.setHostnameVerifier();
 //                    httpsURLConnection.setSSLSocketFactory();
-                }
+//                }
 //                urlConnection.setReadTimeout();
                 //写东西
-                urlConnection.setRequestMethod(request.method.name);
-                urlConnection.setDoOutput(request.method.doOutput());
-                //头信息
-                RequestBody requestBody = request.requestBody;
-                if (requestBody != null) {
-                    urlConnection.setRequestProperty("Content-Type", requestBody.getContentType());
-                    urlConnection.setRequestProperty("Content-Length", Long.toString(requestBody.getContentLength()));
-                }
-                //写内容
-                if (requestBody != null) {
-                    requestBody.onWriteBody(urlConnection.getOutputStream());
-                }
+//                urlConnection.setRequestMethod(request.method.name);
+//                urlConnection.setDoOutput(request.method.doOutput());
+//                //头信息
+//                RequestBody requestBody = request.requestBody;
+//                if (requestBody != null) {
+//                    urlConnection.setRequestProperty("Content-Type", requestBody.getContentType());
+//                    urlConnection.setRequestProperty("Content-Length", Long.toString(requestBody.getContentLength()));
+//                }
+//                //写内容
+//                if (requestBody != null) {
+//                    requestBody.onWriteBody(urlConnection.getOutputStream());
+//                }
+//
+//
+//                urlConnection.connect();
+//
+//
+//                int statusCode = urlConnection.getResponseCode();
+//                if (statusCode == 200) {
+//                    InputStream is = urlConnection.getInputStream();
+//                    Response response = new Response(is);
+//                    callback.onResponse(RealCall.this, response);
+//                }
+
+                List<Interceptor> interceptors = new ArrayList<>();
+                interceptors.add(new RetryAndFollowUpInterceptor());
+                interceptors.add(new BridgeInterceptor());
+                interceptors.add(new CacheInterceptor());
+                interceptors.add(new ConnectInterceptor());
 
 
-                urlConnection.connect();
-
-
-                int statusCode = urlConnection.getResponseCode();
-                if (statusCode == 200) {
-                    InputStream is = urlConnection.getInputStream();
-                    Response response = new Response(is);
-                    callback.onResponse(RealCall.this, response);
-                }
             } catch (Exception e) {e.printStackTrace();}
+
+
         }
     }
 }
