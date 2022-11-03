@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.designmode.R;
 
+import java.io.File;
 import java.io.IOException;
 
 public class OkHttpTestActivity extends AppCompatActivity {
@@ -19,8 +20,11 @@ public class OkHttpTestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ok_http_test);
 
         OkHttpClient client = new OkHttpClient();
+        //文件表单提交
+        File file = new File("");
         RequestBody requestBody = new RequestBody()
                 .type(RequestBody.FORM)
+                .addParams("PageTwo", RequestBody.create(file))
                 .addParams("PageOne", "1");
         Request request = new Request.Bulider()
                 .post(requestBody)
