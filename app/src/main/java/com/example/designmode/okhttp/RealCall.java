@@ -3,6 +3,7 @@ package com.example.designmode.okhttp;
 
 import android.util.Log;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -47,6 +48,34 @@ public class RealCall implements Call {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 if (urlConnection instanceof HttpsURLConnection) {
                     //https的一些操作
+//                    HttpsURLConnection httpsURLConnection = (HttpsURLConnection) urlConnection;
+//                    httpsURLConnection.setHostnameVerifier();
+//                    httpsURLConnection.setSSLSocketFactory();
+                }
+//                urlConnection.setReadTimeout();
+                //写东西
+                urlConnection.setRequestMethod(request.method.name);
+                urlConnection.setDoOutput(request.method.doOutput());
+                //头信息
+                RequestBody requestBody = request.requestBody;
+                if (requestBody != null) {
+                    urlConnection.setRequestProperty("Content-Type", requestBody.getContentType());
+                    urlConnection.setRequestProperty("Content-Length", Long.toString(requestBody.getContentLength()));
+                }
+                //写内容
+                if (requestBody != null) {
+                    requestBody.onWriteBody(urlConnection.getOutputStream());
+                }
+
+
+                urlConnection.connect();
+
+
+                int statusCode = urlConnection.getResponseCode();
+                if (statusCode == 200) {
+                    InputStream is = urlConnection.getInputStream();
+                    Response response = new Response(is);
+                    callback.onResponse(RealCall.this, response);
                 }
             } catch (Exception e) {e.printStackTrace();}
         }

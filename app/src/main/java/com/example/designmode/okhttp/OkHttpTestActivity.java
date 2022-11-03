@@ -19,7 +19,12 @@ public class OkHttpTestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ok_http_test);
 
         OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new RequestBody()
+                .type(RequestBody.FORM)
+                .addParams("PageOne", "1");
         Request request = new Request.Bulider()
+                .post(requestBody)
+                .url("https://www.baidu.com")
                 .bulid();
 
         Call call = client.newCall(request);

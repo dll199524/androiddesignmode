@@ -7,17 +7,20 @@ public class Request {
     final String url;
     final Method method;
     final Map<String, String> headers;
+    final RequestBody requestBody;
 
     private Request(Bulider bulider) {
         this.url = bulider.url;
         this.method = bulider.method;
         this.headers = bulider.headers;
+        this.requestBody = bulider.requestBody;
     }
 
     public static class Bulider {
         String url;
         Method method;
         Map<String, String> headers;
+        RequestBody requestBody;
         public Bulider url(String url) {
             this.url = url;
             return this;
@@ -33,7 +36,8 @@ public class Request {
             return this;
         }
 
-        public Bulider post() {
+        public Bulider post(RequestBody body) {
+            requestBody = body;
             method = Method.POST;
             return this;
         }
