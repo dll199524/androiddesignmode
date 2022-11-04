@@ -9,6 +9,7 @@ import com.example.designmode.R;
 
 import java.io.IOException;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
