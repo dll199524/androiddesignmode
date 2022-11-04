@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
+
     final String url;
     final Method method;
     final Map<String, String> headers;
     final RequestBody requestBody;
+
 
     private Request(Bulider bulider) {
         this.url = bulider.url;
@@ -15,6 +17,11 @@ public class Request {
         this.headers = bulider.headers;
         this.requestBody = bulider.requestBody;
     }
+
+    public void headers(String key, String val) {headers.put(key, val);}
+    public RequestBody getRequestBody() {return requestBody;}
+    public String getUrl() {return url;}
+    public Method getMethod() {return method;}
 
     public static class Bulider {
         String url;

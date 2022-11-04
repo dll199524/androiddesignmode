@@ -12,7 +12,6 @@ public class RealInterceptorChain implements Interceptor.Chain{
     List<Interceptor> interceptors;
     Request request;
 
-
     public RealInterceptorChain(int index, List<Interceptor> interceptors, Request request) {
         this.index = index;
         this.interceptors = interceptors;
@@ -20,9 +19,7 @@ public class RealInterceptorChain implements Interceptor.Chain{
     }
 
     @Override
-    public Request request() {
-        return request;
-    }
+    public Request request() {return request;}
 
     @Override
     public Response proceed(Request request) throws IOException {

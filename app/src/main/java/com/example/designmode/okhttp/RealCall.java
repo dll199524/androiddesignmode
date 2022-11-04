@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.designmode.okhttp.interceptor.BridgeInterceptor;
 import com.example.designmode.okhttp.interceptor.CacheInterceptor;
+import com.example.designmode.okhttp.interceptor.CallServerInterceptor;
 import com.example.designmode.okhttp.interceptor.ConnectInterceptor;
 import com.example.designmode.okhttp.interceptor.Interceptor;
 import com.example.designmode.okhttp.interceptor.RealInterceptorChain;
@@ -93,11 +94,11 @@ public class RealCall implements Call {
                 interceptors.add(new BridgeInterceptor());
                 interceptors.add(new CacheInterceptor());
                 interceptors.add(new ConnectInterceptor());
-                RealInterceptorChain chain = new RealInterceptorChain(0, interceptors, orignalRequest);
+                interceptors.add(new CallServerInterceptor());
+                Interceptor.Chain chain = new RealInterceptorChain(0, interceptors, orignalRequest);
                 Response response = chain.proceed(orignalRequest);
                 callback.onResponse(RealCall.this, response);
             } catch (Exception e) {e.printStackTrace();}
-
 
         }
     }

@@ -8,7 +8,7 @@ public enum Method {
     PUT("PUT"),
     PATCH("PATCH");
 
-    String name;
+    public String name;
     Method (String name) {this.name = name;}
 
     public boolean doOutput() {
