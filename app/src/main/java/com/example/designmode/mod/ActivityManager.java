@@ -8,9 +8,9 @@ import java.util.Stack;
 public class ActivityManager {
     public static volatile ActivityManager instance;
     private Stack<Activity> activities = new Stack<>();
-    public ActivityManager getInstance() {
+    public static ActivityManager getInstance() {
         if (instance == null) {
-            synchronized (ActivityManager.this) {
+            synchronized (ActivityManager.class) {
                 if (instance == null) instance = new ActivityManager();
             }
         }

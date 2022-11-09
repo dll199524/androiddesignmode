@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Designmode"
         tools:targetApi="31">
         <activity
+            android:name=".DownloadTestActivity"
+            android:exported="false" />
+        <activity
             android:name=".okhttp.OkHttpActivity"
             android:exported="false" />
         <activity
