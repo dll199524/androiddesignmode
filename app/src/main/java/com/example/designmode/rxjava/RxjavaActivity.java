@@ -50,24 +50,7 @@ public class RxjavaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rxjava);
         imageView = findViewById(R.id.image);
 //        createBitmap();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL("https://tse4-mm.cn.bing.net/th/id/OIP-C.n0_p3rYRuofABd3XudbZnAHaEo?pid=ImgDet&rs=1");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    Log.d("TAG", "run: =========");
-                    InputStream is = connection.getInputStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(is);
-                    bitmap = drawCenterLable(RxjavaActivity.this, bitmap, "rxjava");
-                    Message message = Message.obtain();
-                    message.obj = bitmap;
-                    handler.sendMessage(message);
-                } catch (IOException e) {e.printStackTrace();}
-
-            }
-        }).start();
-//        createBitmapByRxjava();
+        createBitmapByRxjava();
 
     }
 
