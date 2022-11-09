@@ -14,8 +14,7 @@ public class DaoSupportFactroy {
     private static volatile DaoSupportFactroy instance;
 
     public DaoSupportFactroy(Context context) {
-        File dbroot = new File(context.getExternalFilesDir(null)
-                .getAbsoluteFile() + File.separator + "nhdz" + File.separator + "database");
+        File dbroot = new File(context.getCacheDir() + File.separator + "database");
         if (!dbroot.exists())
             dbroot.mkdirs();
         File dbfile = new File(dbroot, "outcheck.db");
@@ -23,7 +22,7 @@ public class DaoSupportFactroy {
 
     }
 
-    public DaoSupportFactroy getInstance(Context context) {
+    public static DaoSupportFactroy getInstance(Context context) {
         if (instance == null) {
             synchronized (DaoSupportFactroy.class) {
                 instance = new DaoSupportFactroy(context);
