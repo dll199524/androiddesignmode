@@ -1,11 +1,18 @@
 package com.example.designmode.rxjava;
 
 
-
+//被观察者 观察者模式 静态代理等等
 public abstract class Observable<T> implements ObservableSource<T> {
 
-    public static <T>Observable<T> just(T item) {return onAssembly(new ObservableJust<T>(item));}
-    public static <T>Observable<T> onAssembly(ObservableJust<T> source) {return source;}
+    public static <T> Observable<T> just(T item) {return onAssembly(new ObservableJust<T>(item));}
+    public static <T> Observable<T> onAssembly(Observable<T> source) {
+        return source;
+    }
+    public <R> Observable<R> map(Function<T, R> function) {
+        return onAssembly(new ObservableMap<>(this, function));
+    }
+
+
     protected abstract void subscribeActual(Observer<? super T> observer);
 
     @Override
@@ -15,4 +22,5 @@ public abstract class Observable<T> implements ObservableSource<T> {
 
     public void subscribe(Consumer<T> onNext) {subscribe(onNext, null, null);}
     public void subscribe(Consumer<T> onNext, Consumer<T> error, Consumer<T> complete) {subscribe(new LambdaObserver(onNext));}
+
 }
