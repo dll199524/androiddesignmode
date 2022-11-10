@@ -50,8 +50,8 @@ public class RxjavaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rxjava);
         imageView = findViewById(R.id.image);
 //        createBitmap();
-        createBitmapByRxjava();
-
+//        createBitmapByRxjava();
+        test();
     }
 
 
@@ -127,6 +127,34 @@ public class RxjavaActivity extends AppCompatActivity {
         return newBmp;
     }
 
+
+    public void test() {
+        com.example.designmode.rxjava.Observable.just("ss")
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe() {
+                        Log.d("TAG", "onSubscribe: ");
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        Log.d("TAG", "onNext: ");
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("TAG", "onError: ");
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("TAG", "onComplete: ");
+
+                    }
+                });
+    }
 
 
 
