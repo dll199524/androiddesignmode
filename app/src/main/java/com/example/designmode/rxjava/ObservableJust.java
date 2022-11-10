@@ -1,8 +1,6 @@
 package com.example.designmode.rxjava;
 
 
-
-
 public class ObservableJust<T> extends Observable<T>{
 
     T item;

@@ -103,7 +103,6 @@ public class RxjavaActivity extends AppCompatActivity {
     }
 
 
-
     public static Bitmap drawCenterLable(Context context, Bitmap bmp, String text) {
         float scale = context.getResources().getDisplayMetrics().density;
         //创建一样大小的图片
@@ -151,6 +150,14 @@ public class RxjavaActivity extends AppCompatActivity {
                     @Override
                     public void onComplete() {
                         Log.d("TAG", "onComplete: ");
+
+                    }
+                });
+
+        com.example.designmode.rxjava.Observable.just("ss")
+                .subscribe(new com.example.designmode.rxjava.Consumer<String>() {
+                    @Override
+                    public void onNext(String item) {
 
                     }
                 });
