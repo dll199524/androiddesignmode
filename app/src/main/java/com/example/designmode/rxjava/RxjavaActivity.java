@@ -155,12 +155,21 @@ public class RxjavaActivity extends AppCompatActivity {
                 });
 
         com.example.designmode.rxjava.Observable.just("ss")
-                .subscribe(new com.example.designmode.rxjava.Consumer<String>() {
+                .map(new com.example.designmode.rxjava.Function<String, Object>() {
                     @Override
-                    public void onNext(String item) {
+                    public Object apply(String s) {
+                        return s;
+                    }
+                })
+                .subscribeOn(com.example.designmode.rxjava.Schedulers.io())
+                .observeOn(com.example.designmode.rxjava.Schedulers.main())
+                .subscribe(new com.example.designmode.rxjava.Consumer<Object>() {
+                    @Override
+                    public void onNext(Object item) {
 
                     }
                 });
+
     }
 
 
