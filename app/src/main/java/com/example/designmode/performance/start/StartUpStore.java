@@ -15,14 +15,9 @@ public class StartUpStore {
     }
 
     public List<StartUp<?>> getResult() {return result;}
-
     public void setResult(List<StartUp<?>> result) {this.result = result;}
-
     public Map<Class<? extends StartUp>, StartUp<?>> getStartUpMap() {return startUpMap;}
-
     public void setStartUpMap(Map<Class<? extends StartUp>, StartUp<?>> startUpMap) {this.startUpMap = startUpMap;}
-
     public Map<Class<? extends StartUp>, List<Class<? extends StartUp>>> getChildStartUpMap() {return childStartUpMap;}
-
     public void setChildStartUpMap(Map<Class<? extends StartUp>, List<Class<? extends StartUp>>> childStartUpMap) {this.childStartUpMap = childStartUpMap;}
 }

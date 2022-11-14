@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+//fragment懒加载 利用setUserVisibleHint来进行fragment的懒加载
 public abstract class LazyFragment extends Fragment {
 
     private boolean isInit = false;
@@ -31,9 +32,8 @@ public abstract class LazyFragment extends Fragment {
         if (getUserVisibleHint()) {
             LazyLoad();
             isLoad = true;
-        } else
-            if (isLoad)
-                stopLoad();
+        } else if (isLoad)
+            stopLoad();
     }
 
     @Override
@@ -43,8 +43,11 @@ public abstract class LazyFragment extends Fragment {
     }
 
     public abstract int getLayoutRes();
+
     protected abstract void LazyLoad();
-    protected void stopLoad() {}
+
+    protected void stopLoad() {
+    }
 
     @Override
     public void onDestroyView() {

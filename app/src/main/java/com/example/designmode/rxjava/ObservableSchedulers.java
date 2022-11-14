@@ -1,5 +1,6 @@
 package com.example.designmode.rxjava;
 
+
 public class ObservableSchedulers<T> extends Observable{
 
     final Observable source;
@@ -26,4 +27,5 @@ public class ObservableSchedulers<T> extends Observable{
             source.subscribe(observer);
         }
     }
+
 }

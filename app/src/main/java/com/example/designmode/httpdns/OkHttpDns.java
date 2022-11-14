@@ -7,6 +7,13 @@ import java.util.List;
 
 import okhttp3.Dns;
 
+/**
+ * 网络优化缓存dns
+ * HttpDnsCache dnsCache = HttpDnsCache.getInstance();
+ * dnsCache.init(....);
+ * dnsCache.loadDnsCache();
+ *
+ */
 public class OkHttpDns implements Dns {
 
     private static volatile OkHttpDns instance;

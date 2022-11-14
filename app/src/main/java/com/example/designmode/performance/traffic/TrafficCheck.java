@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 流量监控
+ *
+ */
 public class TrafficCheck extends BaseTracker {
 
     public static volatile TrafficCheck instance;
