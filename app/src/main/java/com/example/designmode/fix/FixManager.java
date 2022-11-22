@@ -15,6 +15,7 @@ import java.util.List;
 
 import dalvik.system.BaseDexClassLoader;
 
+
 public class FixManager {
     private Context mContext;
     private final File mDexFile;
@@ -22,21 +23,22 @@ public class FixManager {
 
     public FixManager(Context context) {
         this.mContext = context;
+        //获取应用可以访问的dex目录
         mDexFile = context.getDir("odex", Context.MODE_PRIVATE);
     }
     
     public void fixBugByDex() throws Exception {
-        //1.
+        //1.获取Android系统中原来的dex list
         Object originDexElements = loadOriginDex();
         Log.d(TAG, "fixBugByDex: loadOriginDex end");
-        //2.
+        //2.准备dex解压路径 解压路径是拷贝路径的一个子文件夹
         File unZipDir = prepareUnZipDir();
         Log.d(TAG, "fixBugByDex: prepare unzipdir end" + unZipDir);
-        //3.
+        //3.查看是否有dex文件 如果存在 copy到指定目录,只有在app内部的目录才能解压和解析dex文件
         File srcFile = findDexFiles();
         File destFile = new File(mDexFile, srcFile.getName());
         copyFile(srcFile, destFile);
-        //4.
+        //4.获取copy目录中的所有dex补丁包(*.dex)
         List<File> allFixDexFile = loadAllDexFile();
         if (allFixDexFile == null || allFixDexFile.size() == 0) {
             Log.d(TAG, "fixBugByDex: dex size is incorrect");
@@ -44,9 +46,10 @@ public class FixManager {
         } else {
             Log.d(TAG, "fixBugByDex: dex size is " + allFixDexFile.size());
         }
-        //5.
+        //5.合并所有补丁dex包以及运行中的dex包
         originDexElements = combineDex(allFixDexFile, unZipDir, originDexElements);
         Log.d(TAG, "fixBugByDex: combine end");
+        //6.合并所有补丁dex包以及运行中的dex包
         InjectDexToClassLoader(originDexElements);
     }
 
