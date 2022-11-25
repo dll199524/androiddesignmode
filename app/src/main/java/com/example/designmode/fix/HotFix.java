@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 
-import com.example.designmode.utils.ShareReflectUtil;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -64,6 +62,21 @@ public class HotFix {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void installPathAll(Application application, File patch) throws Throwable {
+        File hackFile = initHack(application);
+        List<File> patchs = new ArrayList<>();
+        if (patch.exists())
+            patchs.add(patch);
+        patchs.add(hackFile);
+        File dexOptDir = application.getCacheDir();
+        ClassLoader classLoader = application.getClassLoader();
+        //android 7.0 APT预编译用我们自己的classLoader替换系统的
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            InjectClassLoader.inject(application, classLoader, patchs);
+        }
+
     }
 
     //防止类被打上CLASS_ISPREVERIFIED标志
