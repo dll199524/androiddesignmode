@@ -1,11 +1,15 @@
 package com.example.designmode.fix;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 
 import com.example.designmode.utils.ShareReflectUtil;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -29,8 +33,14 @@ public class HotFix {
      */
     public static void installPath(Application application, File patch) {
 
+        File hackFile = initHack(application);
         if (patch == null) return;
         ClassLoader pathClassLoader = application.getClassLoader();
+        List<File> patchs = new ArrayList<>();
+        if (patch.exists())
+            patchs.add(patch);
+        patchs.add(hackFile);
+
         try {
             Field pathListField = ShareReflectUtil.findField(pathClassLoader, "pathList");
             Object pathList = pathListField.get(pathClassLoader);
@@ -41,8 +51,7 @@ public class HotFix {
                 makePathElement = ShareReflectUtil.findMethod(pathList, "makePathElement",
                         List.class, File.class, List.class);
             }
-            List<File> patchs = new ArrayList<>();
-            patchs.add(patch);
+
             ArrayList<IOException> ioExceptions = new ArrayList<>();
 
 
@@ -55,5 +64,37 @@ public class HotFix {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //防止类被打上CLASS_ISPREVERIFIED标志
+    private static File initHack(Context context) {
+        File hackDir = context.getDir("hack", Context.MODE_PRIVATE);
+        File hackFile = new File(hackDir, "hack.jar");
+        if (!hackFile.exists()) {
+            BufferedInputStream bis = null;
+            BufferedOutputStream bos = null;
+            try {
+                bis = new BufferedInputStream(context.getAssets().open("hack" + ".jar"));
+                bos = new BufferedOutputStream(new FileOutputStream(hackFile));
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while ((len = (bis.read(buffer))) != -1) {
+                    bos.write(buffer);
+                }
+            } catch (IOException e) {e.printStackTrace();}
+            finally {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return hackFile;
     }
 }
