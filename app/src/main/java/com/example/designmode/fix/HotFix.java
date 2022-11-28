@@ -86,24 +86,55 @@ public class HotFix {
     }
 
     private static class V23 {
-        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) {
+        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) throws Exception{
+            //找到pathList
+            Field pathListField = ShareReflectUtil.findField(classLoader, "pathLists");
+            Object dexPathList = pathListField.get(classLoader);
+            
+            ArrayList<IOException> suppressExpetions = new ArrayList<>();
+            Object[] newElements = makeElements(dexPathList, new ArrayList<>(patchs), dexOptDir, suppressExpetions);
+            ShareReflectUtil.combineElements(classLoader, "dexElements", newElements);
+            
         }
+
+        private static Object[] makeElements(Object dexPathList, ArrayList<File> files, File dexOptDir, ArrayList<IOException> suppressExpetions) throws Exception{
+            Method makeElements = ShareReflectUtil.findMethod(dexPathList, "makePathElements",
+                    List.class, File.class, File.class);
+            return (Object[]) makeElements.invoke(dexPathList, files, dexOptDir, suppressExpetions);
+        }
+
 
 
     }
 
     private static class V19 {
-        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) {
+        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) throws Exception{
+            Field pathListField = ShareReflectUtil.findField(classLoader, "pathLists");
+            Object dexPathList = pathListField.get(classLoader);
+            ArrayList<IOException> suppressedExceptions = new ArrayList<>();
+            ShareReflectUtil.combineElements(classLoader, "dexElements",
+                    makeElements(dexPathList, new ArrayList<>(patchs), dexOptDir, suppressedExceptions));
         }
-
-
+        private static Object[] makeElements(Object dexPathList, ArrayList<File> files, File dexOptDir, ArrayList<IOException> suppressExpetions) throws Exception{
+            Method makeElements = ShareReflectUtil.findMethod(dexPathList, "makePathElements",
+                    ArrayList.class, File.class, ArrayList.class);
+            return (Object[]) makeElements.invoke(dexPathList, files, dexOptDir, suppressExpetions);
+        }
     }
 
     private static class V14 {
-        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) {
+        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) throws Exception{
+            Field pathListField = ShareReflectUtil.findField(classLoader, "pathLists");
+            Object dexPathList = pathListField.get(classLoader);
+
+            ShareReflectUtil.combineElements(classLoader, "dexElements",
+                    makeElements(dexPathList, new ArrayList<>(patchs), dexOptDir));
         }
-
-
+        private static Object[] makeElements(Object dexPathList, ArrayList<File> files, File dexOptDir) throws Exception{
+            Method makeElements = ShareReflectUtil.findMethod(dexPathList, "makePathElements",
+                    ArrayList.class, File.class);
+            return (Object[]) makeElements.invoke(dexPathList, files, dexOptDir);
+        }
     }
 
     //防止类被打上CLASS_ISPREVERIFIED标志
