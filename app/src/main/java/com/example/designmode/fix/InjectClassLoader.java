@@ -2,6 +2,8 @@ package com.example.designmode.fix;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -52,17 +54,36 @@ public class InjectClassLoader extends ClassLoader{
         String dexPath = dexPathBulider.toString();
 
         //apk的so加载路径
+        Field nativeLibraryDirectoriesField = ShareReflectUtil.findField(oldPathList, "nativeLibraryDirectories");
+        List<File> nativeLibraryDirectories = (List<File>) nativeLibraryDirectoriesField.get(oldPathList);
+        StringBuilder libraryPathBuilder = new StringBuilder();
+        isFirstItem = true;
+        for (File nativeLibraryDirectory : nativeLibraryDirectories) {
+            if (nativeLibraryDirectory == null) continue;
+            if (isFirstItem) isFirstItem = false;
+            else libraryPathBuilder.append(File.pathSeparator);
+            libraryPathBuilder.append(nativeLibraryDirectory.getAbsolutePath());
+        }
 
-
-        String librarySearchPath = null;
-
-
-
+        String librarySearchPath = libraryPathBuilder.toString();
         return new MyClassLoader(dexPath, librarySearchPath, ClassLoader.getSystemClassLoader());
     }
 
 
-    private static void doInject(Application application, ClassLoader newClassLoader) {
+    private static void doInject(Application application, ClassLoader newClassLoader) throws NoSuchFieldException, IllegalAccessException {
+        Thread.currentThread().setContextClassLoader(newClassLoader);
+        Context baseContext = (Context) ShareReflectUtil.findField(application, "mBase").get(application);
+        if (Build.VERSION.SDK_INT  >= 26)
+            ShareReflectUtil.findField(baseContext, "mClassLoader").set(baseContext, newClassLoader);
+        if (Build.VERSION.SDK_INT < 27) {
+            Resources resources = application.getResources();
+            try {
+                ShareReflectUtil.findField(resources, "mClassLoader").set(resources, newClassLoader);
+                final Object drawableInflater = ShareReflectUtil.findField(resources, "mDrawableInflater");
+                if (drawableInflater != null) ShareReflectUtil.findField(drawableInflater, "mClassLoader").set(drawableInflater, newClassLoader);
+            } catch (Throwable e) {
 
+            }
+        }
     }
 }

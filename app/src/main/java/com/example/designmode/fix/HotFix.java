@@ -75,7 +75,34 @@ public class HotFix {
         //android 7.0 APT预编译用我们自己的classLoader替换系统的
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             InjectClassLoader.inject(application, classLoader, patchs);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                V23.install(classLoader, patchs, dexOptDir);
+            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                V19.install(classLoader, patchs, dexOptDir);
+            else V14.install(classLoader, patchs, dexOptDir);
         }
+
+    }
+
+    private static class V23 {
+        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) {
+        }
+
+
+    }
+
+    private static class V19 {
+        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) {
+        }
+
+
+    }
+
+    private static class V14 {
+        public static void install(ClassLoader classLoader, List<File> patchs, File dexOptDir) {
+        }
+
 
     }
 
