@@ -1,8 +1,15 @@
 
+
 import org.aspectj.bridge.IMessage
 import org.aspectj.bridge.MessageHandler
 import org.aspectj.tools.ajc.Main
+import org.apache.commons.compress.utils.IOUtils
+import org.objectweb.asm.*
 
+
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
+import java.util.jar.JarOutputStream
 
 
 plugins {
@@ -88,4 +95,89 @@ variants.all { variant ->
             }
         }
     }
+}
+
+//afterEvaluate ({
+//    android.getApplicationVariants().all {
+//        variant ->
+//            String varientName = variant.name
+//            String capitalizeName = varientName.capitalize()
+//            Task dexTask = project.getTasks().findByName("dexBuilderDebug" + capitalizeName)
+//
+//            dexTask.doFirst {
+//                FileCollection files = dexTask.getInputs().getFiles()
+//                for (File file : files) {
+//                    String filePath = file.getAbsolutePath()
+//                    if (filePath.endsWith(".jar"))
+//                        progressJar(file)
+//                    else if (filePath.endsWith(".class"))
+//                        progressClass(variant.getDirName(), file)
+//                }
+//            }
+//    }
+//})
+
+static void progressJar(File file) {
+    try {
+        File bakJar = new File(file.getParent(), file.getName() + ".bak")
+        JarOutputStream jos = new JarOutputStream(new FileOutputStream(bakJar))
+        JarFile jarFile = new JarFile(file)
+        Enumeration<JarEntry> entries = jarFile.entries()
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement()
+            jos.putNextEntry(new JarEntry(entry.getName()))
+            InputStream is = jarFile.getInputStream(entry)
+            String className = entry.getName()
+            if (className.endsWith(".class") && !className.startsWith("com/example/designmode/MyApplication")
+                    && !isAndroidClass(className) && className) {
+                byte[] byteCode = referHack(is)
+                jos.write(byteCode)
+            } else {jos.write(IOUtils.toByteArray(is))}
+            jos.closeEntry();
+        }
+        jos.close()
+        jarFile.close()
+        file.delete()
+        bakJar.renameTo(file)
+    } catch (IOException e) {e.printStackTrace()}
+}
+
+static void progressClass(String dirName, File file) {
+    String filePath = file.getAbsolutePath()
+    String className = filePath.split(dirName[1].substring(1))
+    if (className.startsWith("com/example/designmode/MyApplication") || isAndroidClass(className))
+        return
+    try {
+        FileInputStream fis = new FileInputStream(filePath)
+        byte[] byteCode = referHack(fis)
+        fis.close()
+        FileOutputStream fos = new FileOutputStream(filePath)
+        fos.write(byteCode)
+        fos.close()
+    } catch (IOException e) {e.printStackTrace()}
+}
+
+static boolean isAndroidClass(String filePath) {
+    return filePath.startsWith("android") || filePath.startsWith("androidx")
+}
+
+static byte[] referHack(InputStream is) throws IOException{
+    ClassReader cr = new ClassReader(is)
+    ClassWriter cw = new ClassWriter(cr, 0)
+    ClassVisitor cv = new ClassVisitor(Opcodes.ASM5, cw) {
+        @Override
+        MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+            MethodVisitor mv =  super.visitMethod(access, name, descriptor, signature, exceptions)
+            mv = new MethodVisitor() {
+                @Override
+                void visitInsn(int opcode) {
+                    if ("<init>".equals(name) && opcode == Opcodes.RETURN)
+                        super.visitInsn(Type.getType("Lcom/example/designmode/blocklog/ExpectionCrashHandler;"))
+                    super.visitInsn(opcode)
+                }
+            }
+        }
+    }
+    cr.accept(cv, 0)
+    return cw.toByteArray()
 }

@@ -27,9 +27,6 @@
       <module name="designmode.arouter-compiler" target="1.8" />
       <module name="designmode.arouter-compiler.main" target="1.8" />
       <module name="designmode.arouter-compiler.test" target="1.8" />
-      <module name="designmode.buildSrc" target="11" />
-      <module name="designmode.buildSrc.main" target="11" />
-      <module name="designmode.buildSrc.test" target="11" />
       <module name="designmode.butterknife" target="11" />
       <module name="designmode.butterknife-compiler" target="1.8" />
       <module name="designmode.butterknife-compiler.main" target="1.8" />
