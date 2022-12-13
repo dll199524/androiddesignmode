@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
         Intent in = new Intent(Intent.ACTION_VIEW);
         in.setData(Uri.parse("http://liuwangshu.cn/"));
         startActivity(in);
+
     }
+
 
 
     //hook activity startActivity方法

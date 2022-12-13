@@ -47,7 +47,7 @@ public class EventBus {
         for (Method method : methods) {
             Subscribe subscribe = method.getAnnotation(Subscribe.class);
             if (subscribe != null) {
-                Class<?>[] parameterType = method.getParameterTypes();
+                Class<?>[] parameterType = method.getParameterTypes();//方法类型
                 if (parameterType.length != 1) throw new RuntimeException(method.getName() + "方法只支持一个参数");
                 SubscriberMethod subscriberMethod = new SubscriberMethod(method, parameterType[0], subscribe.threadMode(),
                          subscribe.priority(), subscribe.stiky());

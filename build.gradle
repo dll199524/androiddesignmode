@@ -55,7 +55,8 @@ ext {
             "retrofit21"        : 'com.squareup.retrofit2:converter-gson:2.4.0',
             "retrofit22"        : 'com.squareup.retrofit2:adapter-rxjava2:2.4.0',
 
-            "okhttp3"           : 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+            "okhttp3"           : 'com.squareup.okhttp3:logging-interceptor:3.8.0',
+            "gilde"             : 'com.github.bumptech.glide:glide:4.11.0'
 
     ]
 }
