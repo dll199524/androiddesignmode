@@ -2,7 +2,7 @@ package com.example.designmode.glide.cache;
 
 import java.util.HashMap;
 
-//哈希链表
+//哈希双链表
 public class LRU {
 
     //最近使用原则

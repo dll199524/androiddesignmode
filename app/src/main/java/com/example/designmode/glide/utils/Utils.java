@@ -25,14 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * <pre>
- *     author:
- *     blog  :
- *     time  :
- *     desc  : utils derry
- * </pre>
- */
+
 public final class Utils {
 
     private static final String PERMISSION_ACTIVITY_CLASS_NAME =

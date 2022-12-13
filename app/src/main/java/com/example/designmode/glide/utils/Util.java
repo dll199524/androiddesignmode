@@ -6,16 +6,24 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Looper;
+import android.text.TextUtils;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.RequiresPermission;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -268,5 +276,120 @@ public final class Util {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) {
             throw new IllegalArgumentException("You cannot start a load for a destroyed activity");
         }
+    }
+
+
+    // >>>>>>>>> Preconditions
+
+    public static void checkArgument(boolean expression, @NonNull String message) {
+        if (!expression) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    @NonNull
+    public static <T> T checkNotNull(@Nullable T arg) {
+        return checkNotNull(arg, "Argument must not be null");
+    }
+
+    @NonNull
+    public static <T> T checkNotNull(@Nullable T arg, @NonNull String message) {
+        if (arg == null) {
+            throw new NullPointerException(message);
+        }
+        return arg;
+    }
+
+    @NonNull
+    public static String checkNotEmpty(@Nullable String string) {
+        if (TextUtils.isEmpty(string)) {
+            throw new IllegalArgumentException("Must not be null or empty");
+        }
+        return string;
+    }
+
+    @NonNull
+    public static <T extends Collection<Y>, Y> T checkNotEmpty(@NonNull T collection) {
+        if (collection.isEmpty()) {
+            throw new IllegalArgumentException("Must not be empty. 传递进来的值:"+collection+"是null");
+        }
+        return collection;
+    }
+
+    public static void checkNotEmpty(Bitmap bitmap) {
+        if (null == bitmap) {
+            throw new IllegalArgumentException("Must not be empty. 传递进来的值bitmap:"+bitmap+"是null");
+        }
+    }
+
+
+    // >>>>>>>>>>.
+    /**
+     * 利用java原生的摘要实现SHA256加密
+     * @param str 加密后的报文
+     * @return 最终的效果：唯一 加密的 ac037ea49e34257dc5577d1796bb137dbaddc0e42a9dff051beee8ea457a4668
+     */
+    public static String getSHA256StrJava(String str){
+        MessageDigest messageDigest;
+        String encodeStr = "";
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(str.getBytes("UTF-8"));
+            encodeStr = byte2Hex(messageDigest.digest());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return encodeStr;
+    }
+    /**
+     * 将byte转为16进制
+     * @param bytes
+     * @return
+     */
+    private static String byte2Hex(byte[] bytes){
+        StringBuffer stringBuffer = new StringBuffer();
+        String temp = null;
+        for (int i=0;i<bytes.length;i++){
+            temp = Integer.toHexString(bytes[i] & 0xFF);
+            if (temp.length()==1){
+                //1得到一位的进行补0操作
+                stringBuffer.append("0");
+            }
+            stringBuffer.append(temp);
+        }
+        return stringBuffer.toString();
+    }
+
+    public static void checkNotEmpty(ImageView imageView) {
+        if (imageView == null) {
+            throw new IllegalArgumentException("Must not be empty. 传递进来的值imageView:"+imageView+"是null");
+        }
+    }
+
+    public static Bitmap getFitSampleBitmap(InputStream inputStream) throws Exception {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        byte[] bytes = readStream(inputStream);
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+        options.inSampleSize = 2;
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+    }
+
+    /**
+     * 从inputStream中获取字节流 数组大小
+     **/
+    public static byte[] readStream(InputStream inStream) throws Exception {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while ((len = inStream.read(buffer)) != -1) {
+            outStream.write(buffer, 0, len);
+        }
+        outStream.close();
+        inStream.close();
+        return outStream.toByteArray();
     }
 }

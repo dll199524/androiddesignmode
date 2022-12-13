@@ -146,8 +146,12 @@ public class RequestManagerRetriever implements Handler.Callback {
     public boolean handleMessage(@NonNull Message msg) {
         switch (msg.what) {
             case FRAGMENT_MANAGER:
+                android.app.FragmentManager f1 = (android.app.FragmentManager)msg.obj;
+                pendingRequestManagerFragment.remove(f1);
                 break;
             case SUPPORT_FRAGMENT_MANAGER:
+                FragmentManager f2 = (FragmentManager) msg.obj;
+                pendingSupportRequestManagerFragment.remove(f2);
                 break;
         }
         return false;

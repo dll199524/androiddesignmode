@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.designmode.glide.core.Glide;
+import com.example.designmode.glide.core.RequestManager;
 import com.example.designmode.hook.InstrumentationProxy;
 import com.example.designmode.performance.UserManager;
 
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         Intent in = new Intent(Intent.ACTION_VIEW);
         in.setData(Uri.parse("http://liuwangshu.cn/"));
         startActivity(in);
-
+        RequestManager requestManager = Glide.with(this);
     }
 
 
