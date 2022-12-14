@@ -15,6 +15,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.designmode.glide.binding.ApplicationLifeCycle;
+import com.example.designmode.glide.binding.LifeCycleCallBack;
+import com.example.designmode.glide.binding.LifeCycleListener;
 import com.example.designmode.glide.binding.RequestManagerFragment;
 import com.example.designmode.glide.binding.SupportRequestManagerFragment;
 import com.example.designmode.glide.utils.Util;
@@ -34,11 +36,12 @@ public class RequestManagerRetriever implements Handler.Callback {
     private static final int FRAGMENT_MANAGER = 1; //android app fragment
     private static final int SUPPORT_FRAGMENT_MANAGER = 2; //androidx fragment
     private RequestManager applicationManager;
-    public RequestManagerRetriever() {
-        handler = new Handler(Looper.getMainLooper(), this);
-    }
+    private RequestTargetEngine callBack = new RequestTargetEngine();
+    private Context context;
+    public RequestManagerRetriever() {handler = new Handler(Looper.getMainLooper(), this);}
 
     public RequestManager get(Context context) {
+        this.context = context;
         if (context == null) throw new IllegalArgumentException("context is null....");
         else if (Util.isOnMainThread() && !(context instanceof Application)) {
             if (context instanceof FragmentActivity) return get((FragmentActivity) context);
@@ -55,7 +58,7 @@ public class RequestManagerRetriever implements Handler.Callback {
             synchronized (this) {
                 if (applicationManager == null) {
                     Glide glide = Glide.get(context);
-                    applicationManager = new RequestManager(glide, new ApplicationLifeCycle(), context);
+                    applicationManager = new RequestManager(glide, new ApplicationLifeCycle(), callBack, context);
                 }
             }
         }
@@ -96,7 +99,7 @@ public class RequestManagerRetriever implements Handler.Callback {
         RequestManager requestManager = current.getRequestManager();
         if (requestManager == null) {
             Glide glide = Glide.get(context);
-            requestManager = new RequestManager(glide, current.getGlideLifeCycle(), context);
+            requestManager = new RequestManager(glide, current.getGlideLifeCycle(), callBack, context);
             current.setRequestManager(requestManager);
         }
         return requestManager;
@@ -122,7 +125,7 @@ public class RequestManagerRetriever implements Handler.Callback {
         RequestManager requestManager = current.getRequestManager();
         if (requestManager == null) {
             Glide glide = Glide.get(context);
-            requestManager = new RequestManager(glide, current.getGlideLifeCycle(), context);
+            requestManager = new RequestManager(glide, current.getGlideLifeCycle(), callBack, context);
             current.setRequestManager(requestManager);
         }
         return requestManager;
@@ -155,5 +158,12 @@ public class RequestManagerRetriever implements Handler.Callback {
                 break;
         }
         return false;
+    }
+
+    public RequestTargetEngine load(String path) {
+        handler.removeMessages(FRAGMENT_MANAGER);
+        handler.removeMessages(SUPPORT_FRAGMENT_MANAGER);
+        callBack.startLoadValue(path, context);
+        return callBack;
     }
 }

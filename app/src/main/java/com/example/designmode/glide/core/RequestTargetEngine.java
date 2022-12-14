@@ -1,24 +1,35 @@
 package com.example.designmode.glide.core;
 
 
-import com.example.designmode.glide.binding.LifeCycleListener;
+import android.content.Context;
 
-public class RequestTargetEngine implements LifeCycleListener {
+import com.example.designmode.glide.binding.LifeCycleCallBack;
+
+
+public class RequestTargetEngine implements LifeCycleCallBack {
+
+    private String path;
+    private Context context;
 
     public RequestTargetEngine() {}
 
-    @Override
-    public void onStart() {
+
+    public void startLoadValue(String path, Context context) {
 
     }
 
     @Override
-    public void onDestroy() {
+    public void initAction() {
 
     }
 
     @Override
-    public void onStop() {
+    public void stopAction() {
+
+    }
+
+    @Override
+    public void recycleAction() {
 
     }
 }
