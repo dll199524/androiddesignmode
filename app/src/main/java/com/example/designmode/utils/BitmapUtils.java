@@ -1,10 +1,13 @@
 package com.example.designmode.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
+
+import java.io.File;
 
 public class BitmapUtils {
 
@@ -43,6 +46,30 @@ public class BitmapUtils {
         dst.setPixels(pixels, 0, src.getWidth(), 0, 0, src.getWidth(), src.getHeight());
         return dst;
     }
+
+    public static Bitmap garyByPixels(Bitmap src) {
+        Bitmap dst = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
+        int[] pixels = new int[src.getWidth() * src.getHeight()];
+        src.setPixels(pixels, 0, src.getWidth(), 0, 0, src.getWidth(), src.getHeight());
+        for (int i = 0; i < pixels.length; i++) {
+            int pixel = pixels[i];
+            int a = (pixel >> 24) & 0xff;
+            int r = (pixel >> 16) & 0xff;
+            int g = (pixel >> 8) & 0xff;
+            int b = pixel & 0xff;
+
+            int gray = (r + g + b) / 3;
+            pixels[i] = gray;
+        }
+        dst.setPixels(pixels, 0, src.getWidth(), 0, 0, src.getWidth(), src.getHeight());
+        return dst;
+    }
+
+    //高斯模糊
+
+
+    //黑白板
+
 
 
 }

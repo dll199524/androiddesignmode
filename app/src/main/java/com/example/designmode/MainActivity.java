@@ -4,15 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.app.StatusBarManager;
-import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.widget.ImageView;
 
-import com.example.designmode.glide.core.Glide;
-import com.example.designmode.glide.core.RequestManager;
+import com.bumptech.glide.Glide;
 import com.example.designmode.hook.InstrumentationProxy;
-import com.example.designmode.performance.UserManager;
+import com.example.designmode.utils.BitmapUtils;
 
 import java.lang.reflect.Field;
 
@@ -22,12 +21,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        UserManager userManager = UserManager.getInstance(this);
-        replaceActivityIntrumentation(this);
-        Intent in = new Intent(Intent.ACTION_VIEW);
-        in.setData(Uri.parse("http://liuwangshu.cn/"));
-        startActivity(in);
-        RequestManager requestManager = Glide.with(this);
+//        UserManager userManager = UserManager.getInstance(this);
+//        replaceActivityIntrumentation(this);
+//        Intent in = new Intent(Intent.ACTION_VIEW);
+//        in.setData(Uri.parse("http://liuwangshu.cn/"));
+//        startActivity(in);
+//        RequestManager requestManager = Glide.with(this);
+        ImageView iv = findViewById(R.id.iv);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
+        bitmap = BitmapUtils.grayPixels(bitmap);
+        iv.setImageBitmap(bitmap);
     }
 
 
