@@ -17,11 +17,16 @@ public class LogPinter implements Printer {
     public static final String EXTRA_FINISH_TIME = "block_finish_time";
 
     private final String TAG = "LogPrinter";
-    private Context context;
+    private Context mContext;
     private long startTimeMills, endTimeMills;
+    private StackInfoCatcher mStackInfoCatcher;
 
 
-    public LogPinter(Context context) {this.context = context;}
+    public LogPinter(Context context) {
+        this.mContext = context;
+        mStackInfoCatcher = new StackInfoCatcher(mContext);
+        mStackInfoCatcher.start();
+    }
 
     @Override
     public void println(String x) {
@@ -41,7 +46,7 @@ public class LogPinter implements Printer {
 
     private void notifyBlockEvent(long endTimeMills, long startTimeMills) {
         Log.d(TAG, "block-time: " + (endTimeMills - startTimeMills));
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
         Intent in = new Intent(ACTION_BLOCK);
         in.putExtra(EXTRA_START_TIME, startTimeMills);
         in.putExtra(EXTRA_FINISH_TIME, endTimeMills);
