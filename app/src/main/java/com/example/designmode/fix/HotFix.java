@@ -30,7 +30,7 @@ public class HotFix {
      * @param patch
      */
     public static void installPath(Application application, File patch) {
-
+        //防止类被打上CLASS_ISPREVERIFIED标志把补丁包的类也加入到dexElement里面去
         File hackFile = initHack(application);
         if (patch == null) return;
         ClassLoader pathClassLoader = application.getClassLoader();
@@ -72,7 +72,7 @@ public class HotFix {
         patchs.add(hackFile);
         File dexOptDir = application.getCacheDir();
         ClassLoader classLoader = application.getClassLoader();
-        //android 7.0 APT预编译用我们自己的classLoader替换系统的
+        //android 7.0 APT预编译用我们自己的classLoader替换系统的 高版本classloader存在缓存
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             InjectClassLoader.inject(application, classLoader, patchs);
         } else {

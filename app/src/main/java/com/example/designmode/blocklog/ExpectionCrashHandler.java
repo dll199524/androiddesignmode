@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+//crash监控存到本地文件
 public class ExpectionCrashHandler implements Thread.UncaughtExceptionHandler {
     private static final String TAG = "ExceptionCrashHandler";
     private volatile static ExpectionCrashHandler mInstance;
