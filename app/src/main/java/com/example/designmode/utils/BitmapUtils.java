@@ -1,13 +1,21 @@
 package com.example.designmode.utils;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 
-import java.io.File;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class BitmapUtils {
 
@@ -69,6 +77,130 @@ public class BitmapUtils {
 
 
     //黑白板
+
+
+    public static Bitmap readBitmapFromFile(String filePath, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+        float srcWidth = options.outWidth;
+        float srcHeight = options.outHeight;
+        int inSampleSize = 1;
+        if (srcHeight > height || srcWidth > width) {
+            if (srcWidth > srcHeight) {
+                inSampleSize = Math.round(srcHeight / height);
+            } else {
+                inSampleSize = Math.round(srcWidth / width);
+            }
+        }
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = inSampleSize;
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+
+
+    public static Bitmap readBitmapFromFileDescriptor(String filePath, int width, int height) {
+        try {
+            FileInputStream fis = new FileInputStream(filePath);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFileDescriptor(fis.getFD(), null, options);
+            float srcWidth = options.outWidth;
+            float srcHeight = options.outHeight; int inSampleSize = 1;
+            if (srcHeight > height || srcWidth > width) {
+                if (srcWidth > srcHeight) {
+                    inSampleSize = Math.round(srcHeight / height);
+                } else {
+                    inSampleSize = Math.round(srcWidth / width);
+                }
+            }
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = inSampleSize;
+            return BitmapFactory.decodeFileDescriptor(fis.getFD(), null, options);
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+
+    public static Bitmap readBitmapFromInputStream(InputStream ins, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;BitmapFactory.decodeStream(ins, null, options);
+        float srcWidth = options.outWidth;
+        float srcHeight = options.outHeight;
+        int inSampleSize = 1;
+        if (srcHeight > height || srcWidth > width) {
+            if (srcWidth > srcHeight) {
+                inSampleSize = Math.round(srcHeight / height);
+            } else {
+                inSampleSize = Math.round(srcWidth / width);
+            }
+        }
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = inSampleSize;
+        return BitmapFactory.decodeStream(ins, null, options);
+    }
+
+
+    public static Bitmap readBitmapFromResource(Resources resources, int resourcesId, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(resources, resourcesId, options);
+        float srcWidth = options.outWidth;
+        float srcHeight = options.outHeight;
+        int inSampleSize = 1;
+        if (srcHeight > height || srcWidth > width) {
+            if (srcWidth > srcHeight) {
+                inSampleSize = Math.round(srcHeight / height);
+            } else {
+                inSampleSize = Math.round(srcWidth / width);
+            }
+        }
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = inSampleSize;
+        return BitmapFactory.decodeResource(resources, resourcesId, options);
+    }
+
+    public static Bitmap readBitmapFromAssetsFile(Context context, String filePath) {
+        Bitmap image = null;
+        AssetManager am = context.getResources().getAssets();
+        try {
+            InputStream is = am.open(filePath);
+            image = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    public static Bitmap readBitmapFromByteArray(byte[] data, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        float srcWidth = options.outWidth;
+        float srcHeight = options.outHeight;
+        int inSampleSize = 1;
+        if (srcHeight > height || srcWidth > width) {
+            if (srcWidth > srcHeight) {
+                inSampleSize = Math.round(srcHeight / height);
+            } else {
+                inSampleSize = Math.round(srcWidth / width);
+            }
+        }
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = inSampleSize;
+        return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
 
 
 

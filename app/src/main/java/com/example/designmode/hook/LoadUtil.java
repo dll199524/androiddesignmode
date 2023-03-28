@@ -1,4 +1,4 @@
-package com.example.designmode.utils;
+package com.example.designmode.hook;
 
 import android.content.Context;
 
@@ -9,7 +9,7 @@ import dalvik.system.DexClassLoader;
 
 public class LoadUtil {
 
-    private final static String apkPath = "";
+    private final static String apkPath = "/sdcard/plugin-debug.apk";
 
     public static void loadClass(Context context) {
         try {
