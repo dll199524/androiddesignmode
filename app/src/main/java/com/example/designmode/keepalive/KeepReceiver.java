@@ -1,4 +1,4 @@
-package com.example.designmode.keepalive.activity;
+package com.example.designmode.keepalive;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.example.designmode.keepalive.activity;
+package com.example.designmode.keepalive;
 
 import android.app.Activity;
 import android.content.Context;
