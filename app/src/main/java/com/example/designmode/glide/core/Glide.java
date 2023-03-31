@@ -7,7 +7,7 @@ public class Glide {
 
 
     private static Glide glide;
-    private RequestManagerRetriever requestManagerRetriever;
+    private RequestManagerRetriever requestManagerRetriever = new RequestManagerRetriever();
     public static RequestManager with(Context context) {
         return getRetriever(context).get(context);
     }

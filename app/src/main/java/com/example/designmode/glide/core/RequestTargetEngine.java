@@ -99,7 +99,7 @@ public class RequestTargetEngine implements LifeCycleCallBack, ValueCallback, Re
 
         value = diskLruCache.get(key);
         if (value != null) {
-            Log.d(TAG, "cacheAction: 本次加载的是在（活动缓存）中获取的资源>>>");
+            Log.d(TAG, "cacheAction: 本次加载的是在（磁盘缓存）中获取的资源>>>");
             activeCache.put(key, value);
             return value;
         }

@@ -11,6 +11,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 
 import java.io.FileInputStream;
@@ -19,6 +20,7 @@ import java.io.InputStream;
 
 public class BitmapUtils {
 
+    private static final String TAG = BitmapUtils.class.getSimpleName();
     //ColorMatrix矩阵运算 色彩：针对每个单个处理
     public static Bitmap gray(Bitmap src) {
         Bitmap dst = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src
@@ -36,11 +38,30 @@ public class BitmapUtils {
         return dst;
     }
 
+    public static Bitmap getBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
+            Log.d(TAG, "getBitmap: " + "null");
+            return null;
+        }
+        Bitmap dst = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
+        if (bitmap.getConfig() == Bitmap.Config.ARGB_8888) {
+            int[] pixels = new int[bitmap.getWidth() * bitmap.getHeight()];
+            bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+            for (int i = 0; i < pixels.length; i++) {
+                pixels[i] = pixels[i] & 0xffffff;
+             }
+            dst.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+            return dst;
+        }
+        return bitmap;
+    }
+
     //Bitmap获取像素操作
     public static Bitmap grayPixels(Bitmap src) {
         Bitmap dst = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
+        Log.d(TAG, "grayPixels: " + src.getConfig());
         int[] pixels = new int[src.getWidth() * src.getHeight()];
-        src.setPixels(pixels, 0, src.getWidth(), 0, 0, src.getWidth(), src.getHeight());
+        src.getPixels(pixels, 0, src.getWidth(), 0, 0, src.getWidth(), src.getHeight());
         for (int i = 0; i < pixels.length; i++) {
             int pixel = pixels[i];
             int a = (pixel >> 24) & 0xff;
@@ -58,7 +79,7 @@ public class BitmapUtils {
     public static Bitmap garyByPixels(Bitmap src) {
         Bitmap dst = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
         int[] pixels = new int[src.getWidth() * src.getHeight()];
-        src.setPixels(pixels, 0, src.getWidth(), 0, 0, src.getWidth(), src.getHeight());
+        src.getPixels(pixels, 0, src.getWidth(), 0, 0, src.getWidth(), src.getHeight());
         for (int i = 0; i < pixels.length; i++) {
             int pixel = pixels[i];
             int a = (pixel >> 24) & 0xff;
@@ -201,7 +222,36 @@ public class BitmapUtils {
         return bitmap;
     }
 
-
+    //1. 计算缩放比例
+    //w表示图片实际宽度，h表示图片实际高度
+    //maxW表示图片在屏幕上可显示的最大宽度，maxH表示图片在屏幕上可显示的最大高度
+    private static int calcuteInSampleSize(int w, int h, int maxW, int maxH) {
+        int inSampleSize = 1;
+        if (w > maxW && h > maxH) {
+            inSampleSize = 2;
+            while (w / inSampleSize > maxW && h / inSampleSize > maxH) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+    //2. 根据缩放比例，获取缩放后图片
+    public static Bitmap resizeBitmap(Context context, int id, int maxW, int maxH, boolean hasAlpha) {
+        Resources resources = context.getResources();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        // 设置为true后，再去解析，就只解析 out 参数
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(resources, id, options);
+        int w = options.outWidth;
+        int h = options.outHeight;
+        options.inSampleSize = calcuteInSampleSize(w, h, maxW, maxH);
+        if (!hasAlpha) {
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+        }
+        options.inJustDecodeBounds = false;
+        //根据缩放比例，获取缩放后图片
+        return BitmapFactory.decodeResource(resources, id, options);
+    }
 
 
 }

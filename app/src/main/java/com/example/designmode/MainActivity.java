@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Debug;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,10 +21,14 @@ import java.lang.reflect.Field;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: " + this.hashCode());
+
 //        UserManager userManager = UserManager.getInstance(this);
 //        replaceActivityIntrumentation(this);
 //        Intent in = new Intent(Intent.ACTION_VIEW);
@@ -29,11 +37,24 @@ public class MainActivity extends AppCompatActivity {
 //        RequestManager requestManager = Glide.with(this);
         ImageView iv = findViewById(R.id.iv);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
-        bitmap = BitmapUtils.grayPixels(bitmap);
+        bitmap = BitmapUtils.getBitmap(bitmap);
+//        bitmap = BitmapUtils.grayPixels(bitmap);
         iv.setImageBitmap(bitmap);
+
+        Intent intent = new Intent(MainActivity.this, ProxyActivity.class);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
     }
 
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Debug.stopMethodTracing();
+    }
 
     //hook activity startActivity方法
     public void replaceActivityIntrumentation(Activity activity) {
@@ -63,5 +84,46 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ..................");
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ..................");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ..................");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ..................");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ..................");
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ..................");
+
     }
 }
