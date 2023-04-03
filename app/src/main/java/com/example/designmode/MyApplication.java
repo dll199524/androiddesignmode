@@ -54,19 +54,19 @@ public class MyApplication extends Application {
             }
         };
 
-//        new Task1().create(this);
-//        new Task2().create(this);
-//        new Task3().create(this);
-//        new Task4().create(this);
-//        new Task5().create(this);
-//
-//        new StartUpManager.Bulider()
-//                .addStartUp(new Task5())
-//                .addStartUp(new Task4())
-//                .addStartUp(new Task3())
-//                .addStartUp(new Task2())
-//                .addStartUp(new Task1())
-//                .bulider(this).start();
+        new Task1().create(this);
+        new Task2().create(this);
+        new Task3().create(this);
+        new Task4().create(this);
+        new Task5().create(this);
+
+        new StartUpManager.Bulider()
+                .addStartUp(new Task5())
+                .addStartUp(new Task4())
+                .addStartUp(new Task3())
+                .addStartUp(new Task2())
+                .addStartUp(new Task1())
+                .bulider(this).start();
 
     }
 }

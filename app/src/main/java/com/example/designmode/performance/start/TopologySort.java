@@ -29,9 +29,9 @@ public class TopologySort {
                     List<Class <? extends StartUp>> child = childStartUpMap.get(parent);
                     if (child == null) {
                         child = new ArrayList<>();
-                        childStartUpMap.put(parent, child);
+                        child.add(startUp.getClass());
                     }
-                    child.add(startUp.getClass());
+                    childStartUpMap.put(parent, child);
                 }
             }
         }
