@@ -55,4 +55,5 @@ public class AppDensity {
             field.setAccessible(false);
         } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {e.printStackTrace();}
     }
+
 }
