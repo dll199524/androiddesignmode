@@ -7,6 +7,8 @@ import android.os.Message;
 import android.os.MessageQueue;
 import android.os.StrictMode;
 
+import com.example.designmode.hook.HookUtil;
+import com.example.designmode.hook.LoadUtil;
 import com.example.designmode.performance.start.StartUpManager;
 import com.example.designmode.performance.start.task.Task1;
 import com.example.designmode.performance.start.task.Task2;
@@ -23,6 +25,10 @@ public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
+
+        LoadUtil.loadClass(this);
+        HookUtil.hookAMS();
+        HookUtil.hookHandler();
 
         Debug.startMethodTracing("test");
         if (BuildConfig.DEBUG) {
