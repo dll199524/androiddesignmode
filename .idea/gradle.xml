@@ -7,10 +7,11 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="JDK" />
+        <option name="gradleJvm" value="Android Studio default JDK" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/aidl" />
             <option value="$PROJECT_DIR$/aop" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/arouter-annotation" />
@@ -19,10 +20,12 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/butterknife" />
             <option value="$PROJECT_DIR$/butterknife-compiler" />
+            <option value="$PROJECT_DIR$/client" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/order" />
             <option value="$PROJECT_DIR$/person" />
             <option value="$PROJECT_DIR$/plugin" />
+            <option value="$PROJECT_DIR$/server" />
           </set>
         </option>
       </GradleProjectSettings>

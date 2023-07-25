@@ -9,7 +9,6 @@ import com.example.designmode.glide.binding.LifeCycleCallBack;
 import com.example.designmode.glide.cache.ActiveCache;
 import com.example.designmode.glide.cache.MemoryCache;
 import com.example.designmode.glide.cache.disk.DiskCacheImpl;
-import com.example.designmode.glide.cache.disk.DiskLruCache;
 import com.example.designmode.glide.extra.LoadDataManager;
 import com.example.designmode.glide.extra.ResponseListener;
 import com.example.designmode.glide.resource.Key;

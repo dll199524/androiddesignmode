@@ -156,7 +156,7 @@ public class ExpectionCrashHandler implements Thread.UncaughtExceptionHandler {
         return mInstance;
     }
 
-    public ExpectionCrashHandler() {}
+    private ExpectionCrashHandler() {}
 
 
 }

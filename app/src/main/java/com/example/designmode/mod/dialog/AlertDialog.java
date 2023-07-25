@@ -127,8 +127,6 @@ public class AlertDialog extends Dialog implements DialogInterface {
             dialog.show();
             return dialog;
         }
-
-
     }
 
 }

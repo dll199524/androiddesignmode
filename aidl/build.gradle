@@ -1,0 +1,16 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.example.aidl'
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 32
+    }
+
+
+}
+

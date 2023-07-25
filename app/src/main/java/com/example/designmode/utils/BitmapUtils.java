@@ -10,8 +10,11 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 
 import java.io.FileInputStream;
@@ -252,6 +255,25 @@ public class BitmapUtils {
         //根据缩放比例，获取缩放后图片
         return BitmapFactory.decodeResource(resources, id, options);
     }
+
+    /**
+     * 回收ImageView
+     */
+    public static void recycleImageView(View view) {
+        if (view == null) return;
+        if (view instanceof ImageView) {
+            Drawable drawable = ((ImageView) view).getDrawable();
+            if (drawable instanceof BitmapDrawable) {
+                Bitmap bmp = ((BitmapDrawable) drawable).getBitmap();
+                if (bmp != null && !bmp.isRecycled()) {
+                    ((ImageView) view).setImageBitmap(null);
+                    bmp.recycle();
+                    bmp = null;
+                }
+            }
+        }
+    }
+
 
 
 }
